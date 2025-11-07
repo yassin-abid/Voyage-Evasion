@@ -1,13 +1,12 @@
 // server/server.js
+// Load environment variables as early as possible so imported modules can use them
+import 'dotenv/config';
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import favoriteRoutes from "./routes/favorites.js";
 import destinationRoutes from "./routes/destinations.js";
-
-dotenv.config();
 const app = express();
 
 app.use(cors());
