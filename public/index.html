@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyage Évasion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Voyage Évasion</h1>
+        <nav>
+            <ul>
+                <li><a href="#">ACCUEIL</a></li>
+                <li><a href="#">DESTINATIONS</a></li>
+                <li><a href="#">GALERIE</a></li>
+                <li><a href="#">CONTACT</a></li>
+                <!-- auth links updated dynamically by /js/auth.js -->
+                <li class="auth-links" id="auth-links"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="banner">
+        <h2>Offres Spéciales : -30% sur les séjours d'hiver !</h2>
+    </section>
+
+    <aside class="sidebar"> 
+        <h2>Catégories</h2>
+        <ul>
+            <li><a href="#">Aventure</a></li>
+            <li><a href="#">Famille</a></li>
+            <li><a href="#">Plage</a></li>
+            <li><a href="#">Montagne</a></li>
+            <li><a href="#">Culture</a></li> 
+            <li><a href="#">Histoire</a></li> 
+            <li><a href="#">Bien-être</a></li> 
+        </ul>
+    </aside>
+
+    <section class="main-content">
+        <article>
+            <h2>Paris</h2>
+            <img src="paris.jpeg" alt="Tour Eiffel">
+            <p>Découvrez la ville lumière et ses merveilles.</p>
+            <button>En savoir plus</button>
+        </article>
+        <article>
+            <h2>Maldives</h2>
+            <img src="maldives.jpg" alt="Plage des Maldives">
+            <p>Profitez des plages paradisiaques et des eaux cristallines.</p>
+            <button>En savoir plus</button>
+        </article>
+        <article>
+            <h2>Tokyo</h2>
+            <img src="tokyo.jpg" alt="Vue de Tokyo">
+            <p>Plongez dans la culture unique et vibrante du Japon.</p>
+            <button>En savoir plus</button>
+        </article>
+        <article>
+            <h2>New York</h2> 
+            <img src="newyork.jpg" alt="New York City">
+            <p>Découvrez la ville qui ne dort jamais avec ses immeubles emblématiques.</p>
+            <button>En savoir plus</button>
+        </article>
+        <article>
+            <h2>Sydney</h2> 
+            <img src="sydney.jpg" alt="Opéra de Sydney">
+            <p>Explorez l'une des plus belles villes du monde et ses plages magnifiques.</p>
+            <button>En savoir plus</button>
+        </article>
+        <article>
+            <h2>Barcelone</h2> 
+            <img src="barcelone.jpg" alt="La Sagrada Familia">
+            <p>Venez découvrir les trésors architecturaux de la capitale catalane.</p>
+            <button>En savoir plus</button>
+        </article>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Voyage Évasion. Tous droits réservés.</p>
+        <div class="social-icons">
+            <img src="facebook.png" alt="Facebook">
+            <img src="rss.png" alt="RSS">
+            <img src="twitter.png" alt="Twitter">
+        </div>
+    </footer>
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/destinations.js"></script>
+    <script type="module" src="/js/favorites.js"></script>
+</body>
+</html>
