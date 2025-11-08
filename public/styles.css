@@ -48,6 +48,69 @@ header nav ul li a{
     color: black;
     text-decoration: none;
     font-weight: bold;
+}
+
+
+/* Favorite button styles */
+.fav-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 2;
+}
+
+.fav-button svg {
+    width: 24px;
+    height: 24px;
+    fill: #ffffff;
+    stroke: #000000;
+    stroke-width: 2px;
+    transition: fill 0.3s ease;
+}
+
+.fav-button.active svg {
+    fill: #ff0000;
+}
+
+.fav-button:hover svg {
+    fill: #ff6b6b;
+}
+
+/* Make sure destination articles have relative positioning */
+
+
+
+
+
+
+/* Category styles */
+.sidebar a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.sidebar a:hover {
+    color: #4CAF50;
+}
+
+.sidebar a.active {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.destination-category {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
     font-size: large;
 
 }
@@ -84,30 +147,30 @@ aside{
     background-color: white;
     border-radius: 5px;
     box-shadow: 1px 1px 1px 1px black;
+    height: 660px;
 }
 aside a {
     text-decoration: none;
     color: black;
     text-align: center;
     margin-right: 30px;
-    font-size: 30px;
+    font-size: 35px;
+    
 
 }
 aside h2{
-    font-size: 40px;
+    font-size: 45px;
 }
 aside a:hover{
     font-family: 'Times New Roman', Times, serif;
 color: #4CAF50;
-font-size: x-large;
+
 
 }
-aside h2:hover{
-    color: #0b4e0f;
-    font-size: xx-large;
-}
+
 aside ul li {
     list-style-type: none;
+    margin-bottom: 15px;
     
 }
 .main-content{
@@ -118,7 +181,7 @@ aside ul li {
 }
 article{
     width: 315px;
-    height: 550px;
+    height: 570px;
     background-color: white;
     border-radius: 10px;
     text-align: center;

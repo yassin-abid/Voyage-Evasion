@@ -3,12 +3,19 @@ import Destination from "../models/destination.js";  // Note: use lowercase 'des
 
 const router = express.Router();
 
-// ✅ Get all destinations
+// ✅ Get all destinations with optional category filter
 router.get("/", async (req, res) => {
   try {
-    console.log("Fetching destinations...");
-    const destinations = await Destination.find();
-    console.log("Found destinations:", destinations);
+    const { category } = req.query;
+    let query = {};
+    
+    if (category && category !== 'all') {
+      query.category = category;
+    }
+    
+    console.log("Fetching destinations...", category ? `for category: ${category}` : 'all categories');
+    const destinations = await Destination.find(query);
+    console.log("Found destinations:", destinations.length);
     res.status(200).json(destinations);
   } catch (err) {
     console.error("Error fetching destinations:", err);

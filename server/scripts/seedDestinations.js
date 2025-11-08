@@ -9,39 +9,45 @@ dotenv.config();
 const destinations = [
   {
     name: "Paris",
-    description: "Découvrez la ville lumière et ses merveilles.",
+    description: "Découvrez la ville des lumières et ses merveilles.",
     image: "paris.jpeg",
-    category: "Culture"
+    category: "Culture",
+    __v: 0
   },
   {
     name: "Maldives",
     description: "Profitez des plages paradisiaques et des eaux cristallines.",
     image: "maldives.jpg",
-    category: "Plage"
+    category: "Plage",
+    __v: 0
   },
   {
     name: "Tokyo",
     description: "Plongez dans la culture unique et vibrante du Japon.",
     image: "tokyo.jpg",
-    category: "Culture"
+    category: "Culture",
+
   },
   {
     name: "New York",
     description: "Découvrez la ville qui ne dort jamais avec ses immeubles emblématiques.",
     image: "newyork.jpg",
-    category: "Culture"
+    category: "Culture",
+    __v: 0
   },
   {
     name: "Sydney",
     description: "Explorez l'une des plus belles villes du monde et ses plages magnifiques.",
     image: "sydney.jpg",
-    category: "Plage"
+    category: "Plage",
+    __v: 0
   },
   {
     name: "Barcelone",
     description: "Venez découvrir les trésors architecturaux de la capitale catalane.",
     image: "barcelone.jpg",
-    category: "Culture"
+    category: "Culture",
+    __v: 0
   }
 ];
 

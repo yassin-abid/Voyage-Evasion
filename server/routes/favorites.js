@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import Favorite from "../models/Favorite.js";
+import Destination from "../models/destination.js";
 
 const router = express.Router();
 
@@ -21,8 +22,18 @@ function auth(req, res, next) {
 // Add favorite
 router.post("/:destinationId", auth, async (req, res) => {
   const { destinationId } = req.params;
-  await Favorite.create({ userId: req.user.id, destinationId });
-  res.json({ message: "Added to favorites" });
+  // Validate destination exists
+  const destExists = await Destination.findById(destinationId).select('_id');
+  if (!destExists) return res.status(404).json({ error: 'Destination not found' });
+
+  // Prevent duplicates
+  const existing = await Favorite.findOne({ userId: req.user.id, destinationId });
+  if (existing) {
+    return res.status(200).json({ message: 'Already in favorites', favorite: existing });
+  }
+
+  const created = await Favorite.create({ userId: req.user.id, destinationId });
+  res.status(201).json({ message: "Added to favorites", favorite: created });
 });
 
 // Get all favorites for logged-in user
@@ -35,8 +46,9 @@ router.get("/", auth, async (req, res) => {
 
 // Remove favorite
 router.delete("/:destinationId", auth, async (req, res) => {
-  await Favorite.findOneAndDelete({ userId: req.user.id, destinationId: req.params.destinationId });
-  res.json({ message: "Removed from favorites" });
+  const removed = await Favorite.findOneAndDelete({ userId: req.user.id, destinationId: req.params.destinationId });
+  if (!removed) return res.status(404).json({ message: 'Favorite not found' });
+  res.json({ message: "Removed from favorites", favorite: removed });
 });
 
 export default router;

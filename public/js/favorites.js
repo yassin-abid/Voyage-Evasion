@@ -10,7 +10,13 @@ async function authFetch(url, options = {}) {
   };
 
   const res = await fetch(url, { ...options, headers });
-  if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+  if (!res.ok) {
+    // Normalize 401 -> Not authenticated so callers can redirect consistently
+    if (res.status === 401) throw new Error('Not authenticated');
+    const text = await res.text().catch(() => '');
+    const msg = text || `HTTP error: ${res.status}`;
+    throw new Error(msg);
+  }
   return res.json();
 }
 
@@ -62,32 +68,53 @@ function addFavoriteButton(article) {
 }
 
 // Initialize favorites UI for logged-in users
-async function initializeFavorites() {
-  console.log('Initializing favorites...');
+export async function initializeFavorites() {
+  console.log('Initializing favorites UI...');
+
+  // First: always attach favorite buttons to rendered articles so hearts are visible
+  document.querySelectorAll('article[data-id]').forEach(article => {
+    const artId = article.dataset.id;
+    // Avoid adding multiple buttons if already present
+    if (article.querySelector('.fav-button')) return;
+    // Add button and enable it. Click handler will redirect to login when not authenticated.
+    const button = addFavoriteButton(article);
+    if (button) button.disabled = false;
+  });
+
+  // If the user is logged in, fetch their favorites and mark active ones
+  const token = localStorage.getItem('jwt');
+  if (!token) {
+    console.log('No JWT found — showing hearts but not fetching favorites. Click will prompt login.');
+    return; // done
+  }
+
   try {
     const favorites = await authFetch('/api/favorites');
     console.log('Loaded favorites:', favorites);
-    // Extract _id from populated destinationId objects, or use destinationId if it's already an ID
-    const favMap = new Set(favorites.map(f => f.destinationId._id || f.destinationId));
+    // Guard against favorites with missing destinationId (deleted destination or stale data)
+    const ids = favorites.map(f => {
+      if (!f || !f.destinationId) return null;
+      // destinationId may be populated (object) or just an id string
+      return (typeof f.destinationId === 'object') ? (f.destinationId._id || f.destinationId) : f.destinationId;
+    }).filter(Boolean);
+    const favMap = new Set(ids);
+    const skipped = favorites.length - ids.length;
+    if (skipped > 0) console.warn(`initializeFavorites: skipped ${skipped} favorite(s) with missing destinationId`);
     console.log('Favorite IDs:', [...favMap]);
-    
-    // Add favorite buttons to all articles with data-id
+
+    // Mark active buttons
     document.querySelectorAll('article[data-id]').forEach(article => {
       const artId = article.dataset.id;
-      console.log('Adding favorite button to article:', artId);
-      const button = addFavoriteButton(article);
-      if (button) {
-        if (favMap.has(artId)) {
-          console.log('Article is favorited:', artId);
-          button.classList.add('active');
-        }
-        button.disabled = false; // Enable after initialization
+      const button = article.querySelector('.fav-button');
+      if (!button) return;
+      if (favMap.has(artId)) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
       }
     });
   } catch (err) {
-    if (err.message !== 'Not authenticated') {
-      console.error('Error loading favorites:', err);
-    }
+    console.error('Error loading favorites:', err);
   }
 }
 
