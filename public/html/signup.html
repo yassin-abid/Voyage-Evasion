@@ -3,32 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Login — Voyage Évasion</title>
+  <title>Signup — Voyage Évasion</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <main class="auth-page">
-    <h1>Log in</h1>
-    <form id="login-form">
+    <h1>Create an account</h1>
+    <form id="signup-form">
+      <label>
+        Username
+        <input type="text" name="username" id="username" required />
+      </label>
       <label>
         Email
         <input type="email" name="email" id="email" required />
       </label>
       <label>
         Password
-        <input type="password" name="password" id="password" required />
+        <input type="password" name="password" id="password" required minlength="6" />
       </label>
-      <button type="submit">Log in</button>
+      <button type="submit">Sign up</button>
     </form>
 
-    <p>Don't have an account? <a href="/signup.html">Sign up</a></p>
+    <p>Already have an account? <a href="/html/login.html">Log in</a></p>
 
     <div id="msg" aria-live="polite"></div>
   </main>
 
   <script type="module" src="/js/auth.js"></script>
   <script>
-    document.getElementById('login-form').dataset.mode = 'login';
+    // initialize form mode
+    document.getElementById('signup-form').dataset.mode = 'signup';
   </script>
 </body>
 </html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contactez-Nous - Voyage Évasion</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/css/contact.css">
+</head>
+<body>
+    <header>
+        <h1>Voyage Évasion</h1>
+        <nav>
+            <ul>
+                <li><a href="/index.html">ACCUEIL</a></li>
+                <li><a href="/html/destinations.html">DESTINATIONS</a></li>
+               
+                <li><a href="/html/contact.html" class="active">CONTACT</a></li>
+                <li class="auth-links" id="auth-links"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact-page">
+        <h2>Contactez-Nous</h2>
+        <p>Vous avez une question ou une suggestion? N'hésitez pas à nous contacter.</p>
+
+        <div class="contact-container">
+            <div class="contact-form">
+                <form action="#" method="post">
+                    <label for="name">Nom</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="subject">Sujet</label>
+                    <input type="text" id="subject" name="subject" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+
+                    <button type="submit">Envoyer</button>
+                </form>
+            </div>
+            <div class="contact-info">
+                <h3>Nos Coordonnées</h3>
+                <p><strong>Adresse:</strong> 123 Rue de l'Evasion, 75000 Paris, France</p>
+                <p><strong>Email:</strong> contact@voyage-evasion.com</p>
+                <p><strong>Téléphone:</strong> +216 50 660 523</p>
+
+                <div id="map">
+                    <!-- Google Maps embed can go here -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9916256944226!2d2.292292615674332!3d48.85837007928746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e29641f4569%3A0x2774a63c3b6igne!2sEiffel%20Tower!5e0!3m2!1sen!2sfr!4v1678886456789!5m2!1sen!2sfr" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Voyage Évasion. Tous droits réservés.</p>
+        <div class="social-icons">
+            <img src="/img/facebook.png" alt="Facebook">
+            <img src="/img/rss.png" alt="RSS">
+            <img src="/img/twitter.png" alt="Twitter">
+        </div>
+    </footer>
+
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/contact.js"></script>
+</body>
+</html>

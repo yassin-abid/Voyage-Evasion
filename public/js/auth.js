@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const result = await postJson(apiBase + '/signup', { username, email, password });
       if (result.ok) {
         showMessage(msg, 'Account created. You can now log in.');
-        setTimeout(() => location.href = '/login.html', 800);
+        setTimeout(() => location.href = '/html/login.html', 800);
       } else {
         showMessage(msg, result.body?.error || 'Signup failed', true);
       }
@@ -92,8 +92,8 @@ function renderAuthLinks() {
     }
   } else {
     container.innerHTML = `
-      <a href="/login.html">Login</a>
-      <a href="/signup.html" style="margin-left:8px;background:#4CAF50;padding:6px 10px;border-radius:6px;color:white;">Sign up</a>
+      <a href="/html/login.html">Login</a>
+      <a href="/html/signup.html" style="margin-left:8px;background:#4CAF50;padding:6px 10px;border-radius:6px;color:white;">Sign up</a>
     `;
   }
 }

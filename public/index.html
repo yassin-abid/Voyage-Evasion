@@ -2,90 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Voyage Évasion</title>
+    <title>Voyage Évasion - Accueil</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <header>
         <h1>Voyage Évasion</h1>
         <nav>
             <ul>
-                <li><a href="#">ACCUEIL</a></li>
-                <li><a href="#">DESTINATIONS</a></li>
-                <li><a href="#">GALERIE</a></li>
-                <li><a href="#">CONTACT</a></li>
-                <!-- auth links updated dynamically by /js/auth.js -->
+                <li><a href="/index.html" class="active">ACCUEIL</a></li>
+                <li><a href="/html/destinations.html">DESTINATIONS</a></li>
+                <li><a href="/html/contact.html">CONTACT</a></li>
                 <li class="auth-links" id="auth-links"></li>
             </ul>
         </nav>
     </header>
 
-    <section class="banner">
-        <h2>Offres Spéciales : -30% sur les séjours d'hiver !</h2>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Votre Prochaine Aventure Commence Ici</h2>
+            <p>Découvrez des destinations de rêve et créez des souvenirs inoubliables.</p>
+            <a href="/html/destinations.html" class="cta-button">Explorer les Destinations</a>
+        </div>
     </section>
 
-    <aside class="sidebar"> 
-        <h2>Catégories</h2>
-        <ul>
-            <li><a href="#">Aventure</a></li>
-            <li><a href="#">Famille</a></li>
-            <li><a href="#">Plage</a></li>
-            <li><a href="#">Montagne</a></li>
-            <li><a href="#">Culture</a></li> 
-            <li><a href="#">Histoire</a></li> 
-            <li><a href="#">Bien-être</a></li> 
-        </ul>
-    </aside>
+    <section class="featured-destinations">
+        <h2>Nos Destinations Populaires</h2>
+        <div class="main-content">
+            <!-- This section will be dynamically populated, but we can have placeholders -->
+            <article>
+                <h2>Paris</h2>
+                <img src="/img/paris.jpeg" alt="Tour Eiffel">
+                <p>Découvrez la ville des lumières et ses merveilles.</p>
+                <button>En savoir plus</button>
+            </article>
+            <article>
+                <h2>Maldives</h2>
+                <img src="/img/maldives.jpg" alt="Plage des Maldives">
+                <p>Profitez des plages paradisiaques et des eaux cristallines.</p>
+                <button>En savoir plus</button>
+            </article>
+            <article>
+                <h2>Tokyo</h2>
+                <img src="/img/tokyo.jpg" alt="Vue de Tokyo">
+                <p>Plongez dans la culture unique et vibrante du Japon.</p>
+                <button>En savoir plus</button>
+            </article>
+        </div>
+    </section>
 
-    <section class="main-content">
-        <article>
-            <h2>Paris</h2>
-            <img src="paris.jpeg" alt="Tour Eiffel">
-            <p>Découvrez la ville des lumières et ses merveilles.</p>
-            <button>En savoir plus</button>
-        </article>
-        <article>
-            <h2>Maldives</h2>
-            <img src="maldives.jpg" alt="Plage des Maldives">
-            <p>Profitez des plages paradisiaques et des eaux cristallines.</p>
-            <button>En savoir plus</button>
-        </article>
-        <article>
-            <h2>Tokyo</h2>
-            <img src="tokyo.jpg" alt="Vue de Tokyo">
-            <p>Plongez dans la culture unique et vibrante du Japon.</p>
-            <button>En savoir plus</button>
-        </article>
-        <article>
-            <h2>New York</h2> 
-            <img src="newyork.jpg" alt="New York City">
-            <p>Découvrez la ville qui ne dort jamais avec ses immeubles emblématiques.</p>
-            <button>En savoir plus</button>
-        </article>
-        <article>
-            <h2>Sydney</h2> 
-            <img src="sydney.jpg" alt="Opéra de Sydney">
-            <p>Explorez l'une des plus belles villes du monde et ses plages magnifiques.</p>
-            <button>En savoir plus</button>
-        </article>
-        <article>
-            <h2>Barcelone</h2> 
-            <img src="barcelone.jpg" alt="La Sagrada Familia">
-            <p>Venez découvrir les trésors architecturaux de la capitale catalane.</p>
-            <button>En savoir plus</button>
-        </article>
+    <section class="why-choose-us">
+        <h2>Pourquoi Nous Choisir?</h2>
+        <div class="features">
+            <div class="feature">
+                <img src="path/to/icon1.png" alt="Icone 1">
+                <h3>Destinations de Rêve</h3>
+                <p>Des lieux sélectionnés avec soin pour une expérience unique.</p>
+            </div>
+            <div class="feature">
+                <img src="path/to/icon2.png" alt="Icone 2">
+                <h3>Service Client 24/7</h3>
+                <p>Notre équipe est à votre écoute à tout moment.</p>
+            </div>
+            <div class="feature">
+                <img src="path/to/icon3.png" alt="Icone 3">
+                <h3>Meilleurs Prix Garantis</h3>
+                <p>Nous vous offrons les tarifs les plus compétitifs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <h2>Inscrivez-vous à notre newsletter</h2>
+        <p>Recevez nos dernières offres et inspirations de voyage directement dans votre boîte mail.</p>
+        <form>
+            <input type="email" placeholder="Votre adresse email">
+            <button type="submit">S'inscrire</button>
+        </form>
     </section>
 
     <footer>
         <p>&copy; 2024 Voyage Évasion. Tous droits réservés.</p>
         <div class="social-icons">
-            <img src="facebook.png" alt="Facebook">
-            <img src="rss.png" alt="RSS">
-            <img src="twitter.png" alt="Twitter">
+            <img src="/img/facebook.png" alt="Facebook">
+            <img src="/img/rss.png" alt="RSS">
+            <img src="/img/twitter.png" alt="Twitter">
         </div>
     </footer>
+
     <script type="module" src="/js/auth.js"></script>
-    <script type="module" src="/js/favorites.js"></script>
-    <script type="module" src="/js/destinations.js"></script>
+    <script type="module" src="/js/index.js"></script>
 </body>
 </html>

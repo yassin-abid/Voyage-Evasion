@@ -10,42 +10,42 @@ const destinations = [
   {
     name: "Paris",
     description: "Découvrez la ville des lumières et ses merveilles.",
-    image: "paris.jpeg",
+    image: "/img/paris.jpeg",
     category: "Culture",
     __v: 0
   },
   {
     name: "Maldives",
     description: "Profitez des plages paradisiaques et des eaux cristallines.",
-    image: "maldives.jpg",
+    image: "/img/maldives.jpg",
     category: "Plage",
     __v: 0
   },
   {
     name: "Tokyo",
     description: "Plongez dans la culture unique et vibrante du Japon.",
-    image: "tokyo.jpg",
+    image: "/img/tokyo.jpg",
     category: "Culture",
 
   },
   {
     name: "New York",
     description: "Découvrez la ville qui ne dort jamais avec ses immeubles emblématiques.",
-    image: "newyork.jpg",
+    image: "/img/newyork.jpg",
     category: "Culture",
     __v: 0
   },
   {
     name: "Sydney",
     description: "Explorez l'une des plus belles villes du monde et ses plages magnifiques.",
-    image: "sydney.jpg",
+    image: "/img/sydney.jpg",
     category: "Plage",
     __v: 0
   },
   {
     name: "Barcelone",
     description: "Venez découvrir les trésors architecturaux de la capitale catalane.",
-    image: "barcelone.jpg",
+    image: "/img/barcelone.jpg",
     category: "Culture",
     __v: 0
   }
