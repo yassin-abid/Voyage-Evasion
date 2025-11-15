@@ -55,7 +55,7 @@ function addFavoriteButton(article) {
       }
     } catch (err) {
       if (err.message === 'Not authenticated') {
-        location.href = '/login.html';
+        location.href = '/html/login.html';
       } else {
         console.error('Error toggling favorite:', err);
       }

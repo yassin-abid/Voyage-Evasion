@@ -33,8 +33,10 @@ window.addEventListener('DOMContentLoaded', () => {
       showMessage(msg, 'Creating account...');
       const result = await postJson(apiBase + '/signup', { username, email, password });
       if (result.ok) {
-        showMessage(msg, 'Account created. You can now log in.');
-        setTimeout(() => location.href = '/html/login.html', 800);
+        showMessage(msg, 'Account created! Check your email for confirmation code.');
+        // Store email for confirmation page
+        localStorage.setItem('pendingConfirmationEmail', email);
+        setTimeout(() => location.href = `/html/confirmation.html?email=${encodeURIComponent(email)}`, 1500);
       } else {
         showMessage(msg, result.body?.error || 'Signup failed', true);
       }

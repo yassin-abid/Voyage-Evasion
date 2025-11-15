@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation - Voyage Évasion</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .confirmation-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .confirmation-container h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .confirmation-container p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .code-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 60px;
+            font-size: 28px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .code-input.error {
+            border-color: #f44336;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .verify-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .verify-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+        }
+
+        .verify-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .resend-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .resend-button {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resend-button:hover:not(:disabled) {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .resend-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .timer {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .email-display {
+            background: #f4f4f4;
+            padding: 12px;
+            border-radius: 6px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="icon">✉️</div>
+        <h1>Confirm Your Email</h1>
+        <p>We've sent a 6-digit confirmation code to:</p>
+        <div class="email-display" id="email-display"></div>
+        
+        <div id="message-container"></div>
+
+        <div class="code-input-container">
+            <input type="text" class="code-input" maxlength="1" id="digit1" />
+            <input type="text" class="code-input" maxlength="1" id="digit2" />
+            <input type="text" class="code-input" maxlength="1" id="digit3" />
+            <input type="text" class="code-input" maxlength="1" id="digit4" />
+            <input type="text" class="code-input" maxlength="1" id="digit5" />
+            <input type="text" class="code-input" maxlength="1" id="digit6" />
+        </div>
+
+        <button class="verify-button" id="verify-button">Verify Code</button>
+
+        <div class="resend-section">
+            <p style="color: #666; font-size: 14px;">Didn't receive the code?</p>
+            <button class="resend-button" id="resend-button" disabled>Resend Code</button>
+            <div class="timer" id="timer"></div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="/index.html" style="color: #4CAF50; text-decoration: none; font-size: 14px;">← Back to Home</a>
+        </div>
+    </div>
+
+    <script type="module" src="/js/confirmation.js"></script>
+</body>
+</html>
