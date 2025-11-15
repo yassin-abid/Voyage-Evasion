@@ -81,6 +81,11 @@ export async function initializeFavorites() {
     if (button) button.disabled = false;
   });
 
+  // Clear all active states first to prevent showing old user's favorites
+  document.querySelectorAll('.fav-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
   // If the user is logged in, fetch their favorites and mark active ones
   const token = localStorage.getItem('jwt');
   if (!token) {

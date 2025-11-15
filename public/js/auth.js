@@ -57,6 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (token) {
           localStorage.setItem('jwt', token);
           localStorage.setItem('username', result.body.username || '');
+          localStorage.setItem('isAdmin', result.body.isAdmin ? 'true' : 'false');
           showMessage(msg, 'Login successful — redirecting...');
           setTimeout(() => location.href = '/', 600);
         } else {
@@ -76,6 +77,13 @@ function renderAuthLinks() {
 
   const token = localStorage.getItem('jwt');
   const username = localStorage.getItem('username');
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+  // Show/hide admin nav link
+  const adminNavLink = document.getElementById('admin-nav-link');
+  if (adminNavLink) {
+    adminNavLink.style.display = (token && isAdmin) ? 'block' : 'none';
+  }
 
   if (token) {
     container.innerHTML = `
@@ -88,6 +96,7 @@ function renderAuthLinks() {
         e.preventDefault();
         localStorage.removeItem('jwt');
         localStorage.removeItem('username');
+        localStorage.removeItem('isAdmin');
         // refresh to update UI
         location.reload();
       });

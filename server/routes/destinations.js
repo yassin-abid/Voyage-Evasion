@@ -1,5 +1,6 @@
 import express from "express";
 import Destination from "../models/destination.js";  // Note: use lowercase 'destination.js' for consistency
+import { verifyAdmin } from "../middleware/adminAuth.js";
 
 const router = express.Router();
 
@@ -16,6 +17,12 @@ router.get("/", async (req, res) => {
     console.log("Fetching destinations...", category ? `for category: ${category}` : 'all categories');
     const destinations = await Destination.find(query);
     console.log("Found destinations:", destinations.length);
+    
+    // Add cache control headers to prevent caching
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
     res.status(200).json(destinations);
   } catch (err) {
     console.error("Error fetching destinations:", err);
@@ -33,8 +40,8 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-// ✅ Add a new destination
-router.post("/", async (req, res) => {
+// ✅ Add a new destination (Admin only)
+router.post("/", verifyAdmin, async (req, res) => {
   try {
     const newDestination = new Destination(req.body);
     const saved = await newDestination.save();
@@ -44,8 +51,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// ✅ Update a destination
-router.put("/:id", async (req, res) => {
+// ✅ Update a destination (Admin only)
+router.put("/:id", verifyAdmin, async (req, res) => {
   try {
     const updated = await Destination.findByIdAndUpdate(
       req.params.id,
@@ -59,8 +66,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// ✅ Delete a destination
-router.delete("/:id", async (req, res) => {
+// ✅ Delete a destination (Admin only)
+router.delete("/:id", verifyAdmin, async (req, res) => {
   try {
     const deleted = await Destination.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ message: "Not found" });

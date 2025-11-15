@@ -11,7 +11,7 @@ function auth(req, res, next) {
   if (!token) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     req.user = decoded;
     next();
   } catch {
@@ -22,23 +22,26 @@ function auth(req, res, next) {
 // Add favorite
 router.post("/:destinationId", auth, async (req, res) => {
   const { destinationId } = req.params;
+  const userId = req.user.userId || req.user.id; // Support both field names
+  
   // Validate destination exists
   const destExists = await Destination.findById(destinationId).select('_id');
   if (!destExists) return res.status(404).json({ error: 'Destination not found' });
 
   // Prevent duplicates
-  const existing = await Favorite.findOne({ userId: req.user.id, destinationId });
+  const existing = await Favorite.findOne({ userId, destinationId });
   if (existing) {
     return res.status(200).json({ message: 'Already in favorites', favorite: existing });
   }
 
-  const created = await Favorite.create({ userId: req.user.id, destinationId });
+  const created = await Favorite.create({ userId, destinationId });
   res.status(201).json({ message: "Added to favorites", favorite: created });
 });
 
 // Get all favorites for logged-in user
 router.get("/", auth, async (req, res) => {
-  const favorites = await Favorite.find({ userId: req.user.id })
+  const userId = req.user.userId || req.user.id; // Support both field names
+  const favorites = await Favorite.find({ userId })
     .populate('destinationId', '_id name') // Only populate _id and name fields
     .lean(); // Convert to plain objects for better performance
   res.json(favorites);
@@ -46,7 +49,8 @@ router.get("/", auth, async (req, res) => {
 
 // Remove favorite
 router.delete("/:destinationId", auth, async (req, res) => {
-  const removed = await Favorite.findOneAndDelete({ userId: req.user.id, destinationId: req.params.destinationId });
+  const userId = req.user.userId || req.user.id; // Support both field names
+  const removed = await Favorite.findOneAndDelete({ userId, destinationId: req.params.destinationId });
   if (!removed) return res.status(404).json({ message: 'Favorite not found' });
   res.json({ message: "Removed from favorites", favorite: removed });
 });
