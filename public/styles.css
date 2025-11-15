@@ -275,6 +275,7 @@ article p {
     -webkit-box-orient: vertical;
     line-height: 1.5;
 }
+
 .destination-category {
     margin: 10px auto;
 }
@@ -368,6 +369,198 @@ footer img{
 footer img:hover {
     opacity: 1;
     transform: scale(1.1);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+    position: relative;
+    overflow-y: auto;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.modal-body img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-body h2 {
+    margin: 20px 30px 10px 30px;
+    font-size: 28px;
+    color: #333;
+}
+
+.modal-country {
+    margin: 0 30px 15px 30px;
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.modal-description {
+    margin: 15px 30px;
+    line-height: 1.8;
+    color: #555;
+    font-size: 15px;
+}
+
+.modal-info {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 20px 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    border-radius: 8px;
+    gap: 15px;
+}
+
+.modal-info-item {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.modal-info-item strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.modal-rating {
+    font-size: 20px;
+    color: #ff9800;
+}
+
+.modal-info-item span:not(.modal-price):not(.modal-rating) {
+    font-size: 18px;
+    color: #555;
+    font-weight: 600;
+}
+
+.modal-contact {
+    margin: 15px 30px 30px 30px;
+    padding: 15px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    border-radius: 8px;
+    color: white;
+}
+
+.modal-contact h3 {
+    margin: 0 0 10px 0;
+    font-size: 17px;
+    text-align: center;
+}
+
+.modal-contact p {
+    margin: 6px 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-contact strong {
+    min-width: 120px;
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .modal-body img {
+        height: 200px;
+    }
+    
+    .modal-body h2 {
+        font-size: 24px;
+        margin: 15px 20px 10px 20px;
+    }
+    
+    .modal-country,
+    .modal-description,
+    .modal-info,
+    .modal-contact {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    
+    .modal-info {
+        flex-direction: column;
+    }
 }
 
 /* Auth pages and small UI helpers */

@@ -34,6 +34,7 @@ function createDestinationArticle(destination) {
 
   const button = document.createElement('button');
   button.textContent = 'En savoir plus';
+  button.addEventListener('click', () => openModal(destination._id));
 
   // Append all elements
   article.appendChild(h2);
@@ -97,10 +98,68 @@ function initializeCategoryFilters() {
   });
 }
 
+// Modal functions
+async function openModal(destinationId) {
+  try {
+    const response = await fetch(`/api/destinations/${destinationId}`);
+    if (!response.ok) throw new Error('Failed to fetch destination details');
+    
+    const destination = await response.json();
+    
+    // Populate modal with destination details
+    document.getElementById('modal-image').src = destination.image;
+    document.getElementById('modal-image').alt = destination.name;
+    document.getElementById('modal-name').textContent = destination.name;
+    document.getElementById('modal-country').textContent = `📍 ${destination.country}`;
+    document.getElementById('modal-description').textContent = destination.description;
+    document.getElementById('modal-price').textContent = `€${(destination.price || 0).toFixed(2)}`;
+    document.getElementById('modal-rating').textContent = `⭐ ${(destination.rating || 0).toFixed(1)}/5`;
+    document.getElementById('modal-category').textContent = destination.category;
+    
+    // Show modal
+    const modal = document.getElementById('destinationModal');
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  } catch (err) {
+    console.error('Error opening modal:', err);
+    alert('Failed to load destination details. Please try again.');
+  }
+}
+
+function closeModal() {
+  const modal = document.getElementById('destinationModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto'; // Restore scrolling
+}
+
+// Initialize modal close handlers
+function initializeModal() {
+  const modal = document.getElementById('destinationModal');
+  const closeBtn = document.querySelector('.modal-close');
+  
+  // Close on X button click
+  closeBtn.addEventListener('click', closeModal);
+  
+  // Close on outside click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
+    }
+  });
+}
+
 // Load destinations and initialize filters on page load
 window.addEventListener('DOMContentLoaded', async () => {
   await renderDestinations();
   initializeCategoryFilters();
+  initializeModal();
   // Initialize favorites if user is logged in
  
     // Initialize favorites UI (always attach hearts; will fetch favorites if logged in)
