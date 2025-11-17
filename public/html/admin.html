@@ -6,6 +6,31 @@
   <title>Admin Panel - Voyage Evasion</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <script>
+    // Immediate admin check - runs before page content renders
+    (function() {
+      const token = localStorage.getItem('jwt');
+      if (!token) {
+        window.location.replace('/html/login.html');
+        return;
+      }
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (!payload.isAdmin) {
+          window.location.replace('/index.html');
+          return;
+        }
+      } catch (err) {
+        window.location.replace('/html/login.html');
+        return;
+      }
+    })();
+  </script>
+  <style>
+    /* Hide body content until admin check passes */
+    body { opacity: 0; }
+    body.admin-verified { opacity: 1; transition: opacity 0.2s; }
+  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -73,8 +98,13 @@
         </div>
 
         <div class="form-group">
-          <label for="image">Image Path *</label>
-          <input type="text" id="image" placeholder="/img/destination.jpg" required>
+          <label for="imageFile">Upload Image *</label>
+          <input type="file" id="imageFile" accept="image/*">
+          <small style="color: #666; display: block; margin-top: 5px;">Max size: 5MB (jpeg, jpg, png, gif, webp)</small>
+          <div id="imagePreview" style="margin-top: 10px; display: none;">
+            <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          </div>
+          <input type="hidden" id="currentImage">
         </div>
 
         <div class="form-group full-width">
@@ -131,5 +161,9 @@
 
   <script type="module" src="/js/auth.js"></script>
   <script type="module" src="/js/admin.js"></script>
+  <script>
+    // Mark body as verified so it becomes visible
+    document.body.classList.add('admin-verified');
+  </script>
 </body>
 </html>
