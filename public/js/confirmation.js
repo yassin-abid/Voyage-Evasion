@@ -6,6 +6,7 @@ const API_BASE = '/api/auth';
 // Get email from URL query parameter or localStorage
 const urlParams = new URLSearchParams(window.location.search);
 const userEmail = urlParams.get('email') || localStorage.getItem('pendingConfirmationEmail');
+const shouldAutoResend = urlParams.get('resend') === 'auto' || localStorage.getItem('autoResendCode') === 'true';
 
 // Redirect if no email
 if (!userEmail) {
@@ -14,6 +15,11 @@ if (!userEmail) {
 
 // Display email
 document.getElementById('email-display').textContent = userEmail;
+
+// Clear the auto resend flag immediately
+if (shouldAutoResend) {
+    localStorage.removeItem('autoResendCode');
+}
 
 // Code input handling
 const inputs = [
@@ -144,6 +150,33 @@ function startResendTimer() {
             timerDisplay.textContent = '';
         }
     }, 1000);
+}
+
+// Auto-resend code if coming from login page
+if (shouldAutoResend) {
+    // Automatically resend the code
+    setTimeout(async () => {
+        showMessage('Sending new verification code...', 'success');
+        
+        try {
+            const response = await fetch(`${API_BASE}/resend-code`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userEmail })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage('New verification code sent to your email!', 'success');
+            } else {
+                showMessage(data.error || 'Failed to resend code', 'error');
+            }
+        } catch (error) {
+            console.error('Auto-resend error:', error);
+            showMessage('Failed to send code automatically. Use the resend button.', 'error');
+        }
+    }, 500);
 }
 
 // Start timer on page load

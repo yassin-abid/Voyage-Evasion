@@ -1,7 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import User from "../models/User.js";
 
 const router = express.Router();
@@ -55,29 +54,9 @@ router.post("/signup", async (req, res) => {
     console.log('User saved successfully:', user._id);
 
     try {
-      // Verify SMTP connection
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-        debug: true
-      });
-
-      console.log('Verifying SMTP connection...');
-      await transporter.verify();
-      console.log('SMTP connection verified');
-
       console.log('Attempting to send confirmation code to:', email);
       const info = await sendConfirmationCode(email, confirmationCode);
-      console.log('Confirmation code sent successfully:', {
-        to: email,
-        messageId: info.messageId || '(no id)',
-        response: info.response || '(no response)'
-      });
+      console.log('Confirmation code sent successfully');
 
       return res.status(201).json({ 
         message: "User registered successfully. Please check your email for the confirmation code.",
@@ -87,8 +66,7 @@ router.post("/signup", async (req, res) => {
     } catch (mailErr) {
       console.error('Error sending confirmation code:', {
         email,
-        error: mailErr.message || mailErr,
-        stack: mailErr.stack
+        error: mailErr.message || mailErr
       });
       return res.status(201).json({ 
         message: "User registered but confirmation code failed to send. Please try resending the code.",

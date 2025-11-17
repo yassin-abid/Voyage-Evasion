@@ -64,7 +64,15 @@ window.addEventListener('DOMContentLoaded', () => {
           showMessage(msg, 'Login succeeded but no token returned', true);
         }
       } else {
-        showMessage(msg, result.body?.error || 'Login failed', true);
+        // Check if the error is about email confirmation
+        if (result.status === 403 && result.body?.error?.includes('confirm your email')) {
+          showMessage(msg, 'Email not verified. Redirecting to confirmation page...', false);
+          localStorage.setItem('pendingConfirmationEmail', email);
+          localStorage.setItem('autoResendCode', 'true');
+          setTimeout(() => location.href = `/html/confirmation.html?email=${encodeURIComponent(email)}&resend=auto`, 1500);
+        } else {
+          showMessage(msg, result.body?.error || 'Login failed', true);
+        }
       }
     });
   }

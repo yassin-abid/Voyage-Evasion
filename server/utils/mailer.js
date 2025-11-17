@@ -1,59 +1,47 @@
-import nodemailer from "nodemailer";
+import sgMail from '@sendgrid/mail';
 
-// Configure your transporter (use environment variables for real credentials)
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // Use TLS
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  debug: true, // Enable debug logging
-});
+// Configure SendGrid
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  console.log('✅ SendGrid API key configured');
+} else {
+  console.warn('⚠️  SENDGRID_API_KEY not set - email sending will fail');
+}
 
-// Log environment check
-console.log('Mailer ENV check:', {
-  hasUser: !!process.env.EMAIL_USER,
-  userLength: process.env.EMAIL_USER?.length,
-  hasPass: !!process.env.EMAIL_PASS,
-  passLength: process.env.EMAIL_PASS?.length
-});
-
-// Verify transporter configuration at startup to catch missing credentials early
-transporter.verify().then(() => {
-  console.log('✅ Mailer is configured (SMTP auth verified)');
-}).catch(err => {
-  console.error('Mailer verification failed. Check EMAIL_USER and EMAIL_PASS in .env and your SMTP provider settings.');
-  console.error(err && err.message ? err.message : err);
-});
+// Verify from email is set
+const fromEmail = process.env.SENDGRID_FROM_EMAIL || process.env.EMAIL_USER;
+if (!fromEmail) {
+  console.error('❌ SENDGRID_FROM_EMAIL or EMAIL_USER not set in environment variables');
+} else {
+  console.log('📧 Emails will be sent from:', fromEmail);
+}
 
 export async function sendConfirmationEmail(to, token) {
   const confirmUrl = `${process.env.BASE_URL || "http://localhost:3000"}/api/auth/confirm/${token}`;
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
+  
+  const msg = {
     to,
-    subject: "Confirm your email",
+    from: fromEmail,
+    subject: "Confirm your email - Voyage Évasion",
     html: `<p>Thank you for registering! Please confirm your email by clicking the link below:</p>
            <a href="${confirmUrl}">${confirmUrl}</a>`
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Confirmation email sent to', to, 'messageId=', info.messageId || '(no id)');
-    return info;
+    const result = await sgMail.send(msg);
+    console.log('Confirmation email sent to', to);
+    return result;
   } catch (err) {
-    // Re-throw with a clearer message for the signup flow
-    console.error('Error sending confirmation email:', err && err.message ? err.message : err);
-    throw new Error('Failed to send confirmation email. Check SMTP credentials and provider settings.');
+    console.error('Error sending confirmation email:', err.response?.body || err.message);
+    throw new Error('Failed to send confirmation email.');
   }
 }
 
 // New function to send 6-digit confirmation code
 export async function sendConfirmationCode(to, code) {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
+  const msg = {
     to,
+    from: fromEmail,
     subject: "Voyage Évasion - Confirmation Code",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -71,11 +59,11 @@ export async function sendConfirmationCode(to, code) {
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Confirmation code sent to', to, 'messageId=', info.messageId || '(no id)');
-    return info;
+    const result = await sgMail.send(msg);
+    console.log('Confirmation code sent to', to);
+    return result;
   } catch (err) {
-    console.error('Error sending confirmation code:', err && err.message ? err.message : err);
-    throw new Error('Failed to send confirmation code. Check SMTP credentials and provider settings.');
+    console.error('Error sending confirmation code:', err.response?.body || err.message);
+    throw new Error('Failed to send confirmation code.');
   }
 }
