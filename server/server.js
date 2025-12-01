@@ -7,6 +7,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import favoriteRoutes from "./routes/favorites.js";
 import destinationRoutes from "./routes/destinations.js";
+import chatbotRoutes from "./routes/chatbot.js";
 const app = express();
 
 // CORS configuration for production
@@ -27,6 +28,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use("/api/auth", authRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/destinations", destinationRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
