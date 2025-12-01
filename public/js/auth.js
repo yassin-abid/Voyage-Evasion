@@ -57,6 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (token) {
           localStorage.setItem('jwt', token);
           localStorage.setItem('username', result.body.username || '');
+          localStorage.setItem('email', email); // Store email for profile page
           localStorage.setItem('isAdmin', result.body.isAdmin ? 'true' : 'false');
           showMessage(msg, 'Login successful — redirecting...');
           setTimeout(() => location.href = '/', 600);
@@ -95,7 +96,7 @@ function renderAuthLinks() {
 
   if (token) {
     container.innerHTML = `
-      <a href="#" id="show-user">${username || 'Account'}</a>
+      <a href="/html/profile.html" id="show-user" style="background:#4CAF50;padding:6px 10px;border-radius:6px;color:white;">${username || 'Account'}</a>
       <a href="#" id="logout" style="margin-left:8px;background:#db4b4b;padding:6px 10px;border-radius:6px;">Logout</a>
     `;
     const logoutBtn = document.getElementById('logout');
@@ -104,6 +105,7 @@ function renderAuthLinks() {
         e.preventDefault();
         localStorage.removeItem('jwt');
         localStorage.removeItem('username');
+        localStorage.removeItem('email');
         localStorage.removeItem('isAdmin');
         // refresh to update UI
         location.reload();

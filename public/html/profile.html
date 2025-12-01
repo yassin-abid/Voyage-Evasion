@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Voyage Évasion</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <header>
+        <h1>Voyage Évasion</h1>
+        <nav>
+            <ul>
+                <li><a href="/index.html">ACCUEIL</a></li>
+                <li><a href="/html/destinations.html">DESTINATIONS</a></li>
+                <li><a href="/html/contact.html">CONTACT</a></li>
+                <li id="admin-nav-link" style="display:none;"><a href="/html/admin.html">ADMIN</a></li>
+                <li class="auth-links" id="auth-links"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="profile-avatar">
+                <div class="avatar-icon">👤</div>
+            </div>
+            <div class="profile-info">
+                <h2 id="profile-username">Loading...</h2>
+                <p id="profile-email">email@example.com</p>
+            </div>
+        </section>
+
+        <!-- Favorites Section -->
+        <section class="favorites-section">
+            <h2>Mes Destinations Favorites</h2>
+            <div id="favorites-container" class="favorites-grid">
+                <!-- Favorites will be loaded dynamically -->
+                <div class="loading-message">Chargement de vos favoris...</div>
+            </div>
+        </section>
+
+        <!-- Chatbot Placeholder Section -->
+        <section class="chatbot-section">
+            <div class="chatbot-placeholder">
+                <div class="chatbot-icon">💬</div>
+                <h3>Assistant de Voyage</h3>
+                <p>Notre chatbot intelligent sera bientôt disponible pour vous aider à planifier votre voyage parfait!</p>
+                <button class="chatbot-coming-soon" disabled>Bientôt Disponible</button>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Voyage Évasion. Tous droits réservés.</p>
+    </footer>
+
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/profile.js"></script>
+</body>
+</html>
