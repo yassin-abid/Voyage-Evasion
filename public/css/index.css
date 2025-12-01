@@ -199,6 +199,19 @@
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
 
+.feature-icon {
+    font-size: 60px;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
 .feature img {
     width: 80px;
     height: 80px;

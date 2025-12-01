@@ -202,28 +202,42 @@ nav a:hover{
     transform: scale(1.01);
 }
 
-/* Main Content Layout */
-.main-content{
+/* Container for sidebar and main content */
+.page-container {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 15px;
+    padding: 20px 0px 20px 0px;
+    max-width: 1300px;
+    margin: 0 auto;
     align-items: flex-start;
-    min-height: 500px;
-    padding: 20px 10px;
-    gap: 20px;
-    width: 100%;
 }
 
 /* Sidebar */
 aside{
-    width: 100%;
-    max-width: 300px;
+    flex-shrink: 0;
+    width: 260px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 0 auto;
+    padding: 18px 10px;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+/* Main Content Layout */
+.main-content{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 15px;
+    min-height: 500px;
 }
 
 aside h2{
@@ -256,7 +270,7 @@ aside a:hover{
 /* Destination Cards */
 article{
     width: 100%;
-    max-width: 315px;
+    max-width: 280px;
     min-height: 570px;
     background-color: white;
     border-radius: 10px;
@@ -277,21 +291,21 @@ article:hover{
 
 article h2 {
     margin: 15px 10px 10px 10px;
-    font-size: clamp(18px, 4vw, 24px);
+    font-size: clamp(18px, 4vw, 22px);
     min-height: 40px;
 }
 
 article img{
     width: 90%;
-    max-width: 220px;
+    max-width: 200px;
     border-radius: 8px;
-    height: 300px;
+    height: 280px;
     object-fit: cover;
     margin: 15px auto 10px auto;
 }
 
 article p {
-    padding: 0 15px;
+    padding: 0 12px;
     margin: 10px 0;
     flex-grow: 1;
     overflow: hidden;
@@ -316,7 +330,7 @@ article p {
 
 article button{
     width: 90%;
-    max-width: 260px;
+    max-width: 240px;
     height: 40px;
     background-color: #333;
     color: white;
@@ -684,10 +698,17 @@ header nav ul li.auth-links a:hover { background: #3a9b3a; }
         font-size: 13px;
     }
     
+    .page-container {
+        flex-direction: column;
+        padding: 10px 5px;
+    }
+    
     aside {
-        width: 95%;
-        margin: 10px auto;
+        width: 100%;
+        max-width: none;
+        margin: 0;
         padding: 15px;
+        position: static;
     }
     
     aside h2 {
@@ -699,8 +720,9 @@ header nav ul li.auth-links a:hover { background: #3a9b3a; }
     }
     
     .main-content {
-        padding: 10px 5px;
+        padding: 0;
         gap: 15px;
+        justify-content: center;
     }
     
     article {
@@ -725,13 +747,21 @@ header nav ul li.auth-links a:hover { background: #3a9b3a; }
         justify-content: center;
     }
     
+    .page-container {
+        flex-direction: column;
+        padding: 15px 10px;
+    }
+    
     aside {
-        width: 90%;
-        max-width: 400px;
+        width: 100%;
+        max-width: none;
+        margin: 0 0 20px 0;
+        position: static;
     }
     
     .main-content {
         gap: 15px;
+        justify-content: center;
     }
     
     article {
