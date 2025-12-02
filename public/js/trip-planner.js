@@ -40,6 +40,7 @@ async function handleFormSubmit(e) {
     btnGenerate.textContent = 'Génération de l\'itinéraire...';
 
     const formData = {
+        departure: document.getElementById('departure').value,
         destination: document.getElementById('destination').value,
         duration: document.getElementById('duration').value,
         travelers: document.getElementById('travelers').value,
@@ -51,6 +52,7 @@ async function handleFormSubmit(e) {
     // Construct the prompt
     const prompt = `
     Je veux planifier un voyage avec les détails suivants :
+    - Ville de départ : ${formData.departure}
     - Destination : ${formData.destination}
     - Durée : ${formData.duration} jours
     - Voyageurs : ${formData.travelers}
@@ -59,12 +61,12 @@ async function handleFormSubmit(e) {
     - Intérêts : ${formData.interests}
 
     Crée un itinéraire détaillé jour par jour.
-    IMPORTANT : Si le budget de ${formData.budget}€ semble trop bas pour ${formData.duration} jours à ${formData.destination} pour ${formData.travelers} personnes, fournis quand même un plan pour un budget minimum réaliste, mais commence par expliquer clairement pourquoi le budget initial est insuffisant et quel serait le budget minimum recommandé.
+    IMPORTANT : Si le budget de ${formData.budget}€ semble trop bas pour ${formData.duration} jours à ${formData.destination} (incluant le transport depuis ${formData.departure}) pour ${formData.travelers} personnes, fournis quand même un plan pour un budget minimum réaliste, mais commence par expliquer clairement pourquoi le budget initial est insuffisant et quel serait le budget minimum recommandé.
     
     Structure la réponse avec :
-    1. Résumé du voyage (et avertissement budget si nécessaire)
+    1. Résumé du voyage (incluant options de transport depuis ${formData.departure})
     2. Itinéraire Jour par Jour (Matin, Après-midi, Soir)
-    3. Estimation des coûts
+    3. Estimation des coûts (Transport, Logement, Activités, Nourriture)
     4. Conseils pratiques
     `;
 
@@ -177,6 +179,10 @@ async function sendChatMessage() {
 
     try {
         const token = localStorage.getItem('jwt');
+        
+        // Append instruction to get a full plan update
+        const enhancedMessage = `${message}\n\n(IMPORTANT: Si cette demande implique une modification de l'itinéraire, veuillez régénérer l'itinéraire COMPLET mis à jour afin que je puisse le sauvegarder en entier. Ne donnez pas seulement les changements, mais le plan complet révisé.)`;
+
         const response = await fetch(`${API_BASE}/chatbot/chat`, {
             method: 'POST',
             headers: {
@@ -184,7 +190,7 @@ async function sendChatMessage() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                message: message,
+                message: enhancedMessage,
                 conversationHistory: conversationHistory.map(msg => ({
                     role: msg.role,
                     parts: [{ text: msg.text }]
@@ -203,11 +209,13 @@ async function sendChatMessage() {
         // Add bot response to UI
         addChatMessage(data.response, 'bot');
 
-        // Update current plan data if the user wants to save the *updated* conversation context? 
-        // Actually, usually we save the initial plan, but maybe we should update the "generatedPlan" 
-        // to reflect the latest state of the conversation? 
-        // For now, let's append the new interaction to the generated plan text so it's saved too.
-        currentPlanData.generatedPlan += `\n\n---\n**Modification demandée :** ${message}\n\n**Réponse :** ${data.response}`;
+        // Update the current plan data with the NEW full response
+        // We assume the bot followed instructions and provided a full plan.
+        // Even if it didn't, saving the latest response is better than just appending.
+        currentPlanData.generatedPlan = data.response;
+        
+        // Also update the main display to show the new plan
+        displayPlan(data.response);
 
     } catch (error) {
         console.error('Chat error:', error);

@@ -21,11 +21,12 @@ function auth(req, res, next) {
 // Save a new trip plan
 router.post('/', auth, async (req, res) => {
   try {
-    const { destination, duration, startDate, budget, travelers, interests, generatedPlan } = req.body;
+    const { departure, destination, duration, startDate, budget, travelers, interests, generatedPlan } = req.body;
     const userId = req.user.userId || req.user.id;
 
     const newPlan = new TripPlan({
       userId,
+      departure,
       destination,
       duration,
       startDate,

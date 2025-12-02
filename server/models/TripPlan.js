@@ -6,6 +6,10 @@ const tripPlanSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  departure: {
+    type: String,
+    required: true
+  },
   destination: {
     type: String,
     required: true
