@@ -13,6 +13,9 @@ import chatbotRoutes from "./routes/chatbot.js";
 import tripPlanRoutes from "./routes/trip-plans.js";
 const app = express();
 
+// Trust the proxy (Required for Render/Heroku to handle HTTPS correctly)
+app.set('trust proxy', 1);
+
 // CORS configuration for production
 const corsOptions = {
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
