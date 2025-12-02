@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import passport from "passport"; // Import passport
 import User from "../models/User.js";
 
 const router = express.Router();
@@ -185,6 +186,28 @@ router.post("/resend-code", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+// Google Auth Routes
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/google/callback', 
+  passport.authenticate('google', { session: false, failureRedirect: '/html/login.html' }),
+  (req, res) => {
+    // Successful authentication
+    const user = req.user;
+    
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '1d' }
+    );
+
+    // Redirect to frontend with token
+    // We use a special HTML page to handle the token storage
+    res.redirect(`/html/auth-callback.html?token=${token}&username=${encodeURIComponent(user.username)}&email=${encodeURIComponent(user.email)}&isAdmin=${user.isAdmin}`);
+  }
+);
 
 export default router;
 

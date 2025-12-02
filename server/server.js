@@ -4,6 +4,8 @@ import 'dotenv/config';
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import passport from "passport"; // Import passport
+import "./config/passport.js"; // Import passport config
 import authRoutes from "./routes/auth.js";
 import favoriteRoutes from "./routes/favorites.js";
 import destinationRoutes from "./routes/destinations.js";
@@ -20,6 +22,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(passport.initialize()); // Initialize passport
 app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGO_URI)

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticating...</title>
+</head>
+<body>
+    <p>Authenticating with Google...</p>
+    <script>
+        // Extract params from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const username = urlParams.get('username');
+        const email = urlParams.get('email');
+        const isAdmin = urlParams.get('isAdmin');
+
+        if (token) {
+            // Save to localStorage
+            localStorage.setItem('jwt', token);
+            localStorage.setItem('username', username);
+            localStorage.setItem('email', email);
+            localStorage.setItem('isAdmin', isAdmin);
+
+            // Redirect to home
+            window.location.href = '/index.html';
+        } else {
+            // Error handling
+            window.location.href = '/html/login.html?error=google_auth_failed';
+        }
+    </script>
+</body>
+</html>
