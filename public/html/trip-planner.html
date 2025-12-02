@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificateur de Voyage - Voyage Évasion</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../css/trip-planner.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
+    <link rel="stylesheet" href="../css/nav-badge.css">
+</head>
+<body>
+    <header>
+        <h1>Voyage Évasion</h1>
+        <nav>
+            <ul>
+                <li><a href="/index.html">ACCUEIL</a></li>
+                <li><a href="destinations.html">DESTINATIONS</a></li>
+                <li><a href="trip-planner.html" class="active nav-link-new">PLANIFICATEUR <span class="nav-badge">New</span></a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li id="admin-nav-link" style="display:none;"><a href="/html/admin.html">ADMIN</a></li>
+                <li class="auth-links" id="auth-links"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="planner-container">
+        <section class="planner-intro">
+            <h2>Planifiez Votre Voyage de Rêve</h2>
+            <p>Laissez notre assistant IA créer un itinéraire personnalisé jour par jour pour vous.</p>
+        </section>
+
+        <div class="planner-layout">
+            <!-- Form Section -->
+            <section class="planner-form-section" id="form-section">
+                <form id="trip-form" class="trip-form">
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" name="destination" placeholder="ex: Paris, Japon, Bali..." required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="duration">Durée (jours)</label>
+                            <input type="number" id="duration" name="duration" min="1" max="30" value="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="travelers">Voyageurs</label>
+                            <input type="number" id="travelers" name="travelers" min="1" value="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Date de début (optionnel)</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Budget Total (€)</label>
+                            <input type="number" id="budget" name="budget" placeholder="ex: 1000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interests">Intérêts & Préférences</label>
+                        <textarea id="interests" name="interests" placeholder="ex: Musées, Randonnée, Gastronomie, Plage..." rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-generate">Générer mon Itinéraire</button>
+                </form>
+            </section>
+
+            <!-- Results Section (Hidden initially) -->
+            <section class="planner-results-section" id="results-section" style="display: none;">
+                <div class="results-header">
+                    <h3>Votre Itinéraire Personnalisé</h3>
+                    <div class="results-actions">
+                        <button id="btn-save-plan" class="btn-save">💾 Sauvegarder</button>
+                        <button id="btn-new-search" class="btn-secondary">Nouveau</button>
+                    </div>
+                </div>
+                
+                <div id="plan-content" class="plan-content">
+                    <!-- Generated plan will appear here -->
+                </div>
+
+                <!-- Chat Interface for refinement -->
+                <div class="planner-chat">
+                    <h4>Affiner ce plan avec l'assistant</h4>
+                    <div id="chat-messages" class="chat-messages">
+                        <!-- Chat history -->
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" class="chat-input" placeholder="ex: Change le restaurant du jour 2...">
+                        <button id="chat-send" class="chat-send">➤</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Voyage Évasion. Tous droits réservés.</p>
+    </footer>
+
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/trip-planner.js"></script>
+    <!-- We don't include chatbot.js here because we have a custom chat implementation for this page -->
+</body>
+</html>

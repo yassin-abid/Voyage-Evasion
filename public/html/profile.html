@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/css/profile.css">
     <link rel="stylesheet" href="/css/chatbot.css">
+    <link rel="stylesheet" href="/css/nav-badge.css">
 </head>
 <body>
     <header>
@@ -15,6 +16,7 @@
             <ul>
                 <li><a href="/index.html">ACCUEIL</a></li>
                 <li><a href="/html/destinations.html">DESTINATIONS</a></li>
+                <li><a href="/html/trip-planner.html" class="nav-link-new">PLANIFICATEUR <span class="nav-badge">New</span></a></li>
                 <li><a href="/html/contact.html">CONTACT</a></li>
                 <li id="admin-nav-link" style="display:none;"><a href="/html/admin.html">ADMIN</a></li>
                 <li class="auth-links" id="auth-links"></li>
@@ -43,19 +45,11 @@
             </div>
         </section>
 
-        <!-- Chatbot Placeholder Section -->
-        <section class="chatbot-section">
-            <div class="chatbot-placeholder">
-                <div class="chatbot-icon">💬</div>
-                <h3>Assistant de Voyage Intelligent</h3>
-                <p>Notre chatbot intelligent propulsé par l'IA est maintenant disponible! Cliquez sur l'icône de chat en bas à droite pour commencer.</p>
-                <p style="font-size: 14px; margin-top: 15px;">
-                    <strong>Fonctionnalités:</strong><br>
-                    ✓ Recherche d'hôtels sur Expedia<br>
-                    ✓ Suggestions de destinations personnalisées<br>
-                    ✓ Planification de voyage<br>
-                    ✓ Réponses instantanées à vos questions
-                </p>
+        <!-- Saved Trip Plans Section -->
+        <section class="saved-plans-section">
+            <h2>Mes Itinéraires Sauvegardés</h2>
+            <div id="saved-plans-container" class="saved-plans-grid">
+                <div class="loading-message">Chargement de vos itinéraires...</div>
             </div>
         </section>
     </div>
@@ -66,6 +60,5 @@
 
     <script type="module" src="/js/auth.js"></script>
     <script type="module" src="/js/profile.js"></script>
-    <script src="/js/chatbot.js"></script>
 </body>
 </html>

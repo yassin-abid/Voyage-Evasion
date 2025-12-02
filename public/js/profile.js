@@ -213,6 +213,133 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
+// Fetch and display saved trip plans
+async function loadSavedPlans() {
+    const container = document.getElementById('saved-plans-container');
+    
+    try {
+        const response = await fetch(`${API_BASE}/trip-plans`, {
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch trip plans');
+        }
+
+        const plans = await response.json();
+        
+        if (plans.length === 0) {
+            container.innerHTML = `
+                <div class="empty-message">
+                    <p>Vous n'avez pas encore d'itinéraires sauvegardés.</p>
+                    <p>Créez votre premier voyage avec notre <a href="/html/trip-planner.html" style="color: #4CAF50; font-weight: bold;">Planificateur IA</a>!</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render plan cards
+        container.innerHTML = plans.map(plan => `
+            <div class="plan-card" data-plan-id="${plan._id}">
+                <div class="plan-card-header">
+                    <h3>${plan.destination}</h3>
+                    <span class="plan-date">${new Date(plan.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div class="plan-details">
+                    <p><strong>Durée:</strong> ${plan.duration} jours</p>
+                    <p><strong>Budget:</strong> ${plan.budget}€</p>
+                    <p><strong>Voyageurs:</strong> ${plan.travelers}</p>
+                </div>
+                <div class="plan-card-actions">
+                    <button class="btn-view-plan" onclick="viewPlan('${plan._id}')">
+                        👁️ Voir
+                    </button>
+                    <button class="btn-delete-plan" onclick="deletePlan('${plan._id}')">
+                        🗑️ Supprimer
+                    </button>
+                </div>
+                <!-- Hidden content for modal view -->
+                <div id="plan-content-${plan._id}" style="display:none;">
+                    ${plan.generatedPlan}
+                </div>
+            </div>
+        `).join('');
+
+    } catch (error) {
+        console.error('Error loading plans:', error);
+        container.innerHTML = `
+            <div class="empty-message">
+                <p style="color: #f44336;">Erreur lors du chargement de vos itinéraires.</p>
+            </div>
+        `;
+    }
+}
+
+// View Plan Details (Simple Modal)
+window.viewPlan = function(planId) {
+    const content = document.getElementById(`plan-content-${planId}`).innerHTML;
+    const planCard = document.querySelector(`[data-plan-id="${planId}"]`);
+    const title = planCard.querySelector('h3').textContent;
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Itinéraire pour ${title}</h2>
+            <div class="modal-body markdown-body">
+                ${formatMarkdown(content)}
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Close modal logic
+    const closeBtn = modal.querySelector('.close-modal');
+    closeBtn.onclick = () => modal.remove();
+    window.onclick = (event) => {
+        if (event.target == modal) modal.remove();
+    }
+};
+
+function formatMarkdown(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+}
+
+// Delete Plan
+window.deletePlan = async function(planId) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet itinéraire ?')) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/trip-plans/${planId}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) throw new Error('Failed to delete plan');
+
+        // Remove from UI
+        const card = document.querySelector(`[data-plan-id="${planId}"]`);
+        card.remove();
+        
+        // Check empty state
+        const remaining = document.querySelectorAll('.plan-card');
+        if (remaining.length === 0) {
+            loadSavedPlans(); // Reload to show empty message
+        }
+        
+        showNotification('Itinéraire supprimé', 'success');
+
+    } catch (error) {
+        console.error('Error deleting plan:', error);
+        showNotification('Erreur lors de la suppression', 'error');
+    }
+};
+
 // Initialize page
 window.addEventListener('DOMContentLoaded', () => {
     // Check authentication
@@ -223,4 +350,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Load favorites
     loadFavorites();
+
+    // Load saved plans
+    loadSavedPlans();
 });

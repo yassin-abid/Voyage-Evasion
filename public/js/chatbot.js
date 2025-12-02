@@ -10,8 +10,63 @@ class Chatbot {
     }
 
     init() {
-        this.createChatWidget();
+        const embeddedContainer = document.getElementById('embedded-chat-container');
+        if (embeddedContainer) {
+            this.isEmbedded = true;
+            this.createEmbeddedChat(embeddedContainer);
+        } else {
+            this.isEmbedded = false;
+            this.createChatWidget();
+        }
         this.attachEventListeners();
+        
+        if (this.isEmbedded) {
+            this.isOpen = true;
+            this.loadHistory();
+        }
+    }
+
+    createEmbeddedChat(container) {
+        // Create chat window structure directly in the container
+        container.innerHTML = `
+            <div class="chat-window embedded" id="chat-window">
+                <div class="chat-header">
+                    <h3>
+                        <span>🤖</span>
+                        <span>Assistant Voyage</span>
+                    </h3>
+                    <!-- No close button for embedded chat -->
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-message bot">
+                        <div class="message-avatar bot">🤖</div>
+                        <div class="message-content">
+                            Bonjour! Je suis votre assistant voyage. Je peux vous aider à trouver des destinations, des hôtels, et planifier votre voyage. Comment puis-je vous aider aujourd'hui?
+                        </div>
+                    </div>
+                </div>
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <div class="chat-input-area">
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="chat-input" 
+                        placeholder="Posez votre question..."
+                        autocomplete="off"
+                    />
+                    <button class="chat-send" id="chat-send" aria-label="Send message">
+                        ➤
+                    </button>
+                    <button class="chat-clear" id="chat-clear" aria-label="Clear history" title="Effacer l'historique">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     createChatWidget() {
@@ -76,18 +131,25 @@ class Chatbot {
         const chatSend = document.getElementById('chat-send');
         const chatClear = document.getElementById('chat-clear');
 
-        chatButton.addEventListener('click', () => this.toggleChat());
-        chatClose.addEventListener('click', () => this.toggleChat());
-        chatSend.addEventListener('click', () => this.sendMessage());
-        chatClear.addEventListener('click', () => this.clearHistory());
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.sendMessage();
-            }
-        });
+        if (!this.isEmbedded) {
+            if (chatButton) chatButton.addEventListener('click', () => this.toggleChat());
+            if (chatClose) chatClose.addEventListener('click', () => this.toggleChat());
+        }
+        
+        if (chatSend) chatSend.addEventListener('click', () => this.sendMessage());
+        if (chatClear) chatClear.addEventListener('click', () => this.clearHistory());
+        if (chatInput) {
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.sendMessage();
+                }
+            });
+        }
     }
 
     toggleChat() {
+        if (this.isEmbedded) return;
+
         // Check if user is logged in
         const token = localStorage.getItem('jwt');
         if (!token) {
