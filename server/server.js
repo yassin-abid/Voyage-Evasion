@@ -38,6 +38,11 @@ app.use("/api/destinations", destinationRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/trip-plans", tripPlanRoutes);
 
+// Health check route
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
+});
+
 const PORT = process.env.PORT || 3000;
 if (!process.env.VERCEL) {
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
