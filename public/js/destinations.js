@@ -7,9 +7,23 @@ let allDestinations = []; // Store all destinations
 let currentCategory = null; // Track current category filter
 
 async function fetchDestinations() {
-  const res = await fetch('/api/destinations');
-  if (!res.ok) throw new Error('Failed to fetch destinations');
-  return res.json();
+  try {
+    const res = await fetch('/api/destinations');
+    
+    // Check if response is JSON
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      console.error("API Error: Expected JSON but got:", text.substring(0, 200)); // Log first 200 chars
+      throw new Error("API returned non-JSON response (likely 404 or 500 error)");
+    }
+
+    if (!res.ok) throw new Error('Failed to fetch destinations');
+    return res.json();
+  } catch (err) {
+    console.error("Fetch destinations failed:", err);
+    throw err;
+  }
 }
 
 function createDestinationArticle(destination) {

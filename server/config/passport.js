@@ -9,7 +9,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: (process.env.FRONTEND_URL || "") + "/api/auth/google/callback",
       proxy: true // Important: Trust the proxy to ensure the callback URL uses HTTPS
     },
     async (accessToken, refreshToken, profile, done) => {
