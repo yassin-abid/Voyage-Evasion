@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node server/scripts/seedDestinations.js",
+    "build": "echo 'No build step'",
     "start": "node server/server.js",
     "promote-admin": "node server/scripts/promoteAdmin.js"
   },
