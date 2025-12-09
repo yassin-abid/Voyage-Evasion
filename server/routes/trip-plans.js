@@ -79,12 +79,28 @@ router.get('/:id', auth, async (req, res) => {
 // Update a trip plan
 router.put('/:id', auth, async (req, res) => {
   try {
-    const { generatedPlan } = req.body;
+    const { generatedPlan, budget, destination, startDate, duration, travelers, interests } = req.body;
     const userId = req.user.userId || req.user.id;
+
+    // Handle empty startDate
+    const validStartDate = startDate && startDate.trim() !== '' ? startDate : undefined;
+
+    const updateData = {
+      generatedPlan,
+      budget,
+      destination,
+      duration,
+      travelers,
+      interests
+    };
+
+    if (validStartDate) {
+      updateData.startDate = validStartDate;
+    }
 
     const updatedPlan = await TripPlan.findOneAndUpdate(
       { _id: req.params.id, userId },
-      { generatedPlan },
+      updateData,
       { new: true }
     );
 

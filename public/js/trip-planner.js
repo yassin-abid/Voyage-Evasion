@@ -274,7 +274,14 @@ INSTRUCTIONS POUR LE BOT :
      a) SUPPRIMEZ la liste des suggestions précédentes (ne gardez pas les options non choisies).
      b) INTÉGREZ le choix dans le plan (ex: mettez à jour la section "Hébergement" avec l'hôtel choisi).
      c) Si le choix est ambigu (ex: pour quels jours ?), vous pouvez poser UNE question de clarification à la fin de la note en haut, mais générez quand même le plan avec le choix par défaut (ex: pour tout le séjour).
+   - Si un PARAMÈTRE PRINCIPAL change (Budget, Destination, Dates, Durée, Voyageurs) :
+     a) Mettez à jour TOUTES les références à ce paramètre dans le texte.
+     b) SUPPRIMEZ toute mention de l'ancienne valeur (ex: ne dites pas "Contrairement à votre ancien budget de X...", dites simplement "Avec votre budget de Y...").
+     c) SUPPRIMEZ les sections d'avertissement ou d'explication liées à l'ancienne valeur (ex: si l'ancien budget était "trop haut" et que le nouveau est normal, supprimez le paragraphe "Explication du budget" ou "Budget réaliste recommandé").
+     d) Assurez la cohérence globale (ex: si la date change, mettez à jour les jours; si la destination change, refaites tout l'itinéraire).
    - Le résultat final DOIT être le plan complet mis à jour.
+   - IMPORTANT : Si vous modifiez des paramètres structurés (Budget, Destination, Dates, Durée), ajoutez À LA TOUTE FIN de votre réponse une ligne cachée au format JSON comme ceci :
+     |||UPDATES: {"budget": 2500, "destination": "Paris"}|||
 3. Si la demande est une simple question de lecture, répondez par texte.
 4. Si la demande est impossible, expliquez pourquoi.
 `;
@@ -298,24 +305,61 @@ INSTRUCTIONS POUR LE BOT :
         
         // Update history
         conversationHistory.push({ role: 'user', text: message });
-        conversationHistory.push({ role: 'model', text: data.response });
+        
+        let responseText = data.response;
+        let updates = {};
+
+        // Check for hidden updates
+        const updateMatch = responseText.match(/\|\|\|UPDATES: (.*?)\|\|\|/);
+        if (updateMatch) {
+            try {
+                updates = JSON.parse(updateMatch[1]);
+                // Remove the hidden block from the text to display
+                responseText = responseText.replace(updateMatch[0], '').trim();
+                
+                // Update currentPlanData with new values
+                if (currentPlanData) {
+                    // Sanitize budget if present (ensure it's a number)
+                    if (updates.budget) {
+                        const budgetNum = parseFloat(String(updates.budget).replace(/[^0-9.]/g, ''));
+                        if (!isNaN(budgetNum)) {
+                            updates.budget = budgetNum;
+                        }
+                    }
+
+                    Object.assign(currentPlanData, updates);
+                    console.log('Plan parameters updated:', updates);
+
+                    // Visual feedback on Save button
+                    const btnSave = document.getElementById('btn-save-plan');
+                    if (btnSave) {
+                        btnSave.textContent = '💾 Sauvegarder (Paramètres modifiés)';
+                        btnSave.style.backgroundColor = '#e67e22'; // Orange to indicate change
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to parse updates:', e);
+            }
+        }
+
+        conversationHistory.push({ role: 'model', text: responseText });
 
         // Heuristic to check if it's a full plan or just a message
         // A plan usually contains "Jour 1" or is quite long (> 500 chars)
-        const isFullPlan = data.response.includes("Jour 1") || data.response.length > 500;
+        const isFullPlan = responseText.includes("Jour 1") || responseText.length > 500;
 
         if (isFullPlan) {
             // It's a plan update
             addChatMessage("✅ Modifications effectuées ! L'itinéraire à gauche a été mis à jour.", 'bot');
             
             // Update the current plan data with the NEW full response
-            currentPlanData.generatedPlan = data.response;
+            currentPlanData.generatedPlan = responseText;
             
             // Also update the main display to show the new plan
-            displayPlan(data.response);
+            displayPlan(responseText);
         } else {
             // It's just a message/explanation (error or refusal)
-            addChatMessage(data.response, 'bot');
+            addChatMessage(responseText, 'bot');
             // Do NOT update the plan on the left
         }
 
