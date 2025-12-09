@@ -165,6 +165,11 @@ window.removeFavorite = async function(destinationId) {
     }
 };
 
+// Refine Plan Redirect
+window.refinePlan = function(planId) {
+    window.location.href = `/html/trip-planner.html?planId=${planId}`;
+};
+
 // Show notification
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
@@ -254,6 +259,9 @@ async function loadSavedPlans() {
                     <button class="btn-view-plan" onclick="viewPlan('${plan._id}')">
                         👁️ Voir
                     </button>
+                    <button class="btn-refine-plan" onclick="refinePlan('${plan._id}')" style="background-color: #FF9800; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-left: 5px;">
+                        ✏️ Affiner
+                    </button>
                     <button class="btn-delete-plan" onclick="deletePlan('${plan._id}')">
                         🗑️ Supprimer
                     </button>
@@ -291,10 +299,16 @@ window.viewPlan = function(planId) {
             <div class="modal-body markdown-body">
                 ${formatMarkdown(content)}
             </div>
+            <div style="text-align: center; margin-top: 20px; padding-bottom: 20px;">
+                <button onclick="refinePlan('${planId}')" style="background-color: #FF9800; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px;">
+                    ✏️ Affiner cet itinéraire avec l'IA
+                </button>
+            </div>
         </div>
     `;
 
     document.body.appendChild(modal);
+    modal.style.display = 'block'; // Ensure it's visible
 
     // Close modal logic
     const closeBtn = modal.querySelector('.close-modal');

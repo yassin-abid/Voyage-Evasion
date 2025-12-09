@@ -85,7 +85,7 @@ async function callGemini(prompt, conversationHistory = []) {
     throw new Error('Gemini API key not configured');
   }
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const endpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
   // Build the system instruction and context
   const systemContext = `You are a helpful travel assistant for "Voyage Évasion", a travel booking website. 
@@ -101,14 +101,14 @@ Important guidelines:
 - **Be direct and concise.** Avoid unnecessary pleasantries or filler words. Get straight to the point.
 - **Structure your answers.** Use bullet points, numbered lists, and bold text to make information easy to read.
 - **Organize information logically.** Group related details together (e.g., "Hotels", "Activities", "Tips").
-- Only answer travel-related questions. Politely decline to answer unrelated topics.
+- **Creative Pivoting:** If the user asks about a non-travel topic (weather, mood, general chat), DO NOT refuse. Instead, find a creative link to travel. (e.g., "The weather is nice! Perfect for a trip to the Mediterranean.")
 - When users ask about specific destinations or hotels, you can search Expedia for real-time data.
 - Ask clarifying questions if you need more information (dates, budget, preferences, number of travelers, etc.)
 - Be friendly, professional, and helpful
 - Suggest relevant destinations from our website when appropriate
 - Provide practical travel advice
 
-If a user asks something completely unrelated to travel, politely say: "I'm a travel assistant and can only help with travel-related questions. How can I assist you with planning your next trip?"`;
+Do not say "I can't help with that". Always find a way to connect the topic to travel. Be brief and direct.`;
 
   try {
     const response = await fetch(endpoint, {
@@ -138,6 +138,10 @@ If a user asks something completely unrelated to travel, politely say: "I'm a tr
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        console.warn("Gemini API rate limit exceeded.");
+        return "Je reçois actuellement un volume élevé de demandes. Veuillez réessayer dans quelques instants.";
+      }
       const errorText = await response.text();
       throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
     }
@@ -190,7 +194,7 @@ router.post("/chat", auth, async (req, res) => {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    console.log('Chatbot received message:', message);
+    // console.log('Chatbot received message:', message);
 
     // Get or create user's chat history
     let chatHistory = await ChatHistory.findOne({ userId });

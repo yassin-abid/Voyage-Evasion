@@ -86,19 +86,22 @@
                     </div>
                 </div>
                 
-                <div id="plan-content" class="plan-content">
-                    <!-- Generated plan will appear here -->
-                </div>
-
-                <!-- Chat Interface for refinement -->
-                <div class="planner-chat">
-                    <h4>Affiner ce plan avec l'assistant</h4>
-                    <div id="chat-messages" class="chat-messages">
-                        <!-- Chat history -->
+                <div class="results-split-container">
+                    <!-- Left Side: The Plan -->
+                    <div id="plan-content" class="plan-content">
+                        <!-- Generated plan will appear here -->
                     </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chat-input" class="chat-input" placeholder="ex: Change le restaurant du jour 2...">
-                        <button id="chat-send" class="chat-send">➤</button>
+
+                    <!-- Right Side: Chat Interface for refinement -->
+                    <div class="planner-chat">
+                        <h4>Affiner ce plan</h4>
+                        <div id="chat-messages" class="chat-messages">
+                            <!-- Chat history -->
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="ex: Change le restaurant du jour 2...">
+                            <button id="chat-send" class="chat-send">➤</button>
+                        </div>
                     </div>
                 </div>
             </section>

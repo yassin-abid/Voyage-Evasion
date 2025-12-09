@@ -24,12 +24,15 @@ router.post('/', auth, async (req, res) => {
     const { departure, destination, duration, startDate, budget, travelers, interests, generatedPlan } = req.body;
     const userId = req.user.userId || req.user.id;
 
+    // Handle empty startDate to prevent CastError
+    const validStartDate = startDate && startDate.trim() !== '' ? startDate : undefined;
+
     const newPlan = new TripPlan({
       userId,
       departure,
       destination,
       duration,
-      startDate,
+      startDate: validStartDate,
       budget,
       travelers,
       interests,
@@ -40,7 +43,7 @@ router.post('/', auth, async (req, res) => {
     res.status(201).json(newPlan);
   } catch (error) {
     console.error('Error saving trip plan:', error);
-    res.status(500).json({ error: 'Failed to save trip plan' });
+    res.status(500).json({ error: 'Failed to save trip plan', details: error.message });
   }
 });
 
@@ -53,6 +56,46 @@ router.get('/', auth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching trip plans:', error);
     res.status(500).json({ error: 'Failed to fetch trip plans' });
+  }
+});
+
+// Get a single trip plan by ID
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId || req.user.id;
+    const plan = await TripPlan.findOne({ _id: req.params.id, userId });
+    
+    if (!plan) {
+      return res.status(404).json({ error: 'Trip plan not found' });
+    }
+    
+    res.json(plan);
+  } catch (error) {
+    console.error('Error fetching trip plan:', error);
+    res.status(500).json({ error: 'Failed to fetch trip plan' });
+  }
+});
+
+// Update a trip plan
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const { generatedPlan } = req.body;
+    const userId = req.user.userId || req.user.id;
+
+    const updatedPlan = await TripPlan.findOneAndUpdate(
+      { _id: req.params.id, userId },
+      { generatedPlan },
+      { new: true }
+    );
+
+    if (!updatedPlan) {
+      return res.status(404).json({ error: 'Trip plan not found' });
+    }
+
+    res.json(updatedPlan);
+  } catch (error) {
+    console.error('Error updating trip plan:', error);
+    res.status(500).json({ error: 'Failed to update trip plan' });
   }
 });
 
